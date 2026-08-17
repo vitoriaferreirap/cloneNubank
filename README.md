@@ -1,41 +1,69 @@
-# Projeto de Desenvolvimento Web
+# CloneNubank
 
-## Descrição
+Réplica da interface da home do Nubank, com backend em Node.js/Express servindo
+o conteúdo dinâmico das seções da página via MongoDB.
 
-Este projeto foi desenvolvido utilizando JavaScript, Node.js e MongoDB como banco de dados NoSQL. O projeto é dividido em duas partes principais: **Frontend** e **Backend**.
+## Destaques técnicos
 
-### Frontend
+- **Armazenamento de imagens via GridFS**, um bucket por seção da página
+  (carrossel, blocos, cards), guardando o arquivo e seus metadados (título,
+  texto, link) como uma unidade só, sem precisar de storage externo.
+- **Frontend fiel ao design original**, com carrossel (Slick), navbar, hero e
+  cards de produto replicando a experiência visual do app real.
 
-O frontend é o foco principal do projeto e é responsável pela interface com o usuário. Utilizei frameworks como Bootstrap e Sass para estilização e garantir a responsividade do design. A interação com o backend é feita através de uma API RESTful. O frontend inclui funcionalidades como:
+## Tecnologias
 
-- **Responsividade**: Design adaptável a diferentes tamanhos de tela.
-- **Cópia do Design Original**: Implementação fiel ao design proposto para garantir consistência visual.
-- **Renderização Dinâmica de Conteúdo**: Dados como cards e carrosséis são renderizados dinamicamente com JavaScript.
+- Node.js + Express
+- MongoDB — driver nativo + GridFS para armazenamento de imagens
+- HTML + Bootstrap 5 + jQuery + Slick Carousel (via CDN)
+- Sass para estilização
+- Docker *(containeriza o frontend estático)*
 
-### Backend
+## Endpoints principais
 
-O backend é responsável pela criação e gerenciamento dinâmico de conteúdo. Foi desenvolvido com Node.js e MongoDB, e expõe uma API RESTful para interação com o frontend. O backend inclui funcionalidades como:
+Padrão consistente para os 6 recursos de conteúdo (`carrosel`, `duploCards`,
+`backgroud`, `bloco`, `elementos`, `cardCards`):
 
-- **Criação de APIs**: API RESTful para interagir com o frontend.
-- **Manipulação de Dados**: CRUD (Create, Read, Update, Delete) para gerenciar dados no banco de dados.
-- **Arquitetura MVC**: Organização do código com Model-View-Controller.
+- `POST /:recurso` — upload de imagem + metadados
+- `GET /:recurso` — lista os itens
+- `GET /:recurso/:filename` — stream da imagem
 
-### Testes com Postman
+## Como rodar localmente
 
-Utilizei o Postman para testar as funcionalidades da API RESTful desenvolvida. Com o Postman, pude realizar operações de **POST**, **GET**, **PUT**, e **DELETE** para verificar o funcionamento das endpoints da API e garantir que o backend estivesse respondendo corretamente às solicitações. 
+⚠️ **Nota importante**: o frontend hoje aponta para uma URL de produção fixa
+que está fora do ar. Para rodar ponta a ponta localmente, é necessário
+primeiro atualizar essa URL no `Frontend/js/script.js` para apontar para o
+backend local.
 
-## Tecnologias Utilizadas
+\`\`\`bash
+# Backend
+cd Backend
+npm install
+\`\`\`
 
-- **JavaScript**: Linguagem principal do projeto.
-- **Node.js**: Utilizado para criar a API RESTful.
-- **MongoDB**: Banco de dados NoSQL.
-- **Bootstrap/Sass**: Frameworks para estilização e responsividade.
-- **Google Cloud**: Hospedagem e implantação.
-- **Docker**: Containerização da aplicação.
+Crie um `.env` com sua string de conexão MongoDB:
+\`\`\`
+MONGODB_URI=<sua_string_de_conexão>
+PORT=<porta>
+\`\`\`
 
-## Como Rodar o Projeto localmente
+\`\`\`bash
+npm start
+\`\`\`
 
-1. **Pasta principal** :
-   npm start
+\`\`\`bash
+# Frontend
+cd Frontend
+npm install
+npm start
+\`\`\`
 
+## Limitações conhecidas
 
+Projeto de estudo focado em replicar uma interface real e explorar GridFS —
+lacunas conscientes:
+
+- Backend de produção atualmente indisponível
+- Sem autenticação (tela de login é só visual)
+- Sem testes automatizados (validado manualmente via Postman)
+- Sem validação de tipo/tamanho de arquivo no upload

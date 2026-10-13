@@ -1,69 +1,26 @@
-# CloneNubank
+# Nubank Home Page API & Interface
 
-Réplica da interface da home do Nubank, com backend em Node.js/Express servindo
-o conteúdo dinâmico das seções da página via MongoDB.
-
-## Destaques técnicos
-
-- **Armazenamento de imagens via GridFS**, um bucket por seção da página
-  (carrossel, blocos, cards), guardando o arquivo e seus metadados (título,
-  texto, link) como uma unidade só, sem precisar de storage externo.
-- **Frontend fiel ao design original**, com carrossel (Slick), navbar, hero e
-  cards de produto replicando a experiência visual do app real.
+Aplicação Full-Stack desenvolvida para estudar o desacoplamento entre front-end e back-end, focando na construção de APIs RESTful dinâmicas e persistência de arquivos binários.
 
 ## Tecnologias
 
-- Node.js + Express
-- MongoDB — driver nativo + GridFS para armazenamento de imagens
-- HTML + Bootstrap 5 + jQuery + Slick Carousel (via CDN)
-- Sass para estilização
-- Docker *(containeriza o frontend estático)*
+- **Back-end:** Node.js, Express, MongoDB (Driver Nativo + GridFS)
+- **Front-end:** HTML5, CSS3, Sass, JavaScript (Vanilla/jQuery), Bootstrap 5, Slick Carousel
+- **Ferramentas:** Docker, Postman
 
-## Endpoints principais
+## Arquitetura e Decisões Técnicas
 
-Padrão consistente para os 6 recursos de conteúdo (`carrosel`, `duploCards`,
-`backgroud`, `bloco`, `elementos`, `cardCards`):
+- **API RESTful Dinâmica:** Estruturação de rotas padronizadas (`POST`, `GET`) para gerenciar 6 recursos distintos de conteúdo (carrosséis, cards e blocos de seção).
+- **Gerenciamento de Mídia (GridFS):** Utilização do GridFS do MongoDB para armazenar arquivos de imagem e seus respectivos metadados (título, link, texto) de forma unificada, dispensando serviços externos de storage.
+- **Isolamento de Ambiente:** Uso de variáveis de ambiente (`.env`) e containerização básica para organização do fluxo de desenvolvimento.
 
-- `POST /:recurso` — upload de imagem + metadados
-- `GET /:recurso` — lista os itens
-- `GET /:recurso/:filename` — stream da imagem
+## Como Executar o Projeto
 
-## Como rodar localmente
+### Pré-requisitos
+- Node.js instalado
+- Instância do MongoDB (local ou Atlas)
 
-⚠️ **Nota importante**: o frontend hoje aponta para uma URL de produção fixa
-que está fora do ar. Para rodar ponta a ponta localmente, é necessário
-primeiro atualizar essa URL no `Frontend/js/script.js` para apontar para o
-backend local.
-
-\`\`\`bash
-# Backend
+### 1. Configurando o Back-end
+```bash
 cd Backend
 npm install
-\`\`\`
-
-Crie um `.env` com sua string de conexão MongoDB:
-\`\`\`
-MONGODB_URI=<sua_string_de_conexão>
-PORT=<porta>
-\`\`\`
-
-\`\`\`bash
-npm start
-\`\`\`
-
-\`\`\`bash
-# Frontend
-cd Frontend
-npm install
-npm start
-\`\`\`
-
-## Limitações conhecidas
-
-Projeto de estudo focado em replicar uma interface real e explorar GridFS —
-lacunas conscientes:
-
-- Backend de produção atualmente indisponível
-- Sem autenticação (tela de login é só visual)
-- Sem testes automatizados (validado manualmente via Postman)
-- Sem validação de tipo/tamanho de arquivo no upload
